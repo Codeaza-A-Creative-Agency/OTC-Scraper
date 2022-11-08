@@ -41,9 +41,9 @@ def get_data(name):
         sharesValue=resp['securities'][0]['outstandingShares']
         share_date= resp['securities'][0]['outstandingSharesAsOfDate']
         s_date=pd.to_datetime(share_date, unit='ms').to_pydatetime()
+        # save_to_db(sharesValue,name,s_date)
         cur.execute(f"SELECT value FROM outstanding_shares where company_code='{name}' ORDER BY company_code DESC LIMIT 1")
         value= cur.fetchone()
-        
         if value[0] != sharesValue:
             print(value[0])
             print(sharesValue)
@@ -59,7 +59,7 @@ def get_data(name):
             #     error_message = e.smtp_error
             #     print(error_code, error_message)
         else:
-            return"No change in outstanding shares"
+            return"No change found in outstanding shares"
 
     except:
         return "No data found for this company code :" + name
