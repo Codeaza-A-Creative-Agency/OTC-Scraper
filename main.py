@@ -1,6 +1,7 @@
 import requests
 import json
 import pandas as pd
+from savetodb import save_to_db
 headers = {
     'authority': 'backend.otcmarkets.com',
     'accept': 'application/json, text/plain, */*',
@@ -18,18 +19,19 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
 }
 
-params = {
-    'symbol': 'CPMD',
-}
 
-response = requests.get('https://backend.otcmarkets.com/otcapi/company/profile/full/CPMD', params=params, headers=headers)
-resp= response.json()
-def get_data():
+names = ['ZURVY', "AMZN", "CPMD","SIHBY","MVPT","GBTC","ADYEY"]
+ids=1
+for name in names:
+    params = {
+    'symbol': name,
+    }
+    response = requests.get(f'https://backend.otcmarkets.com/otcapi/company/profile/full/{name}', params=params, headers=headers)
+    print(response.url)
+    resp= response.json()
     sharesValue=resp['securities'][0]['outstandingShares']
     share_date= resp['securities'][0]['outstandingSharesAsOfDate']
     s_date=pd.to_datetime(share_date, unit='ms').to_pydatetime()
-   
-    return sharesValue,s_date
-
-
-print(get_data())
+    print(sharesValue, s_date)
+    save_to_db(ids,sharesValue,name,s_date)
+    ids +=1
