@@ -2,7 +2,7 @@ import mysql.connector
 def save_to_db(value,c_code,date):
     mydb = mysql.connector.connect(
       host="localhost",
-      user="faheem",
+      user="app",
       password="1234",
       database= 'otc')
     cur = mydb.cursor()
