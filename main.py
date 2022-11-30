@@ -58,14 +58,14 @@ def get_data(name):
             
             # if company data already existed and now the shares have changed
             if(value is not None and value[0] != sharesValue):
-                previous_shares = "{:,}".format(value[0])
-                new_shares = "{:,}".format(sharesValue)
+                previous_shares = "{:,}".format(int(value[0]))
+                new_shares = "{:,}".format(int(sharesValue))
                 if (sharesValue > value[0]):
                     shares_change = "increased"
                 else:
                     shares_change = "decreased"
                 change_percentage = round(((sharesValue - value[0])/value[0])*100,2)
-                change_value = ((sharesValue - value[0]))
+                change_value = "{:,}".format(int(sharesValue - value[0]))
                 email_obj.send_email("OTC Markets Shares Changed", f"Shares for {name} have been {shares_change} by {change_value} ({change_percentage}%) from {previous_shares} to {new_shares}")
 
             save_to_db(sharesValue,name,s_date)
